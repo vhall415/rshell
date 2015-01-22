@@ -14,13 +14,13 @@ int main()
 		int i = 0;	//index for line
 		if(line[i] == ' ' || line[i] == '\t')	//line starts with space/tab
 		{
-			while(line[i] == ' ' || line[i] == '\t')	//loop until not a space or tab
+			while((line[i] == ' ' || line[i] == '\t') && i < line.size())	//loop until not a space or tab
 			i++;
 		}
-		if(line[i] == '#')
-			break;
-		while(line[i] != ' ' || line[i] != '\t' || line[i] != '&' || line[i] != ';' || line[i] != '|')
+		while(i < line.size() && !(line[i] == ' ' || line[i] == '\t' || line[i] == '&' || line[i] == ';' || line[i] == '|'))
 		{
+			if(line[i] == '#')
+				break;
 			cmd += line[i];
 			i++;
 		}
