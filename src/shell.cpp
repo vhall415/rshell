@@ -1,24 +1,25 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 int main()
 {
-	char *cmd = "";
+	string cmd = "";
 	while(cmd != "exit")
 	{
-		char *line;
+		string line;
 		cout << "$";	//print command prompt
 		getline(cin, line);	//puts the user text in line
 		int i = 0;	//index for line
-		if(line[i] == " " || line[i] == "\t")	//line starts with space/tab
+		if(line[i] == ' ' || line[i] == '\t')	//line starts with space/tab
 		{
-		while(line[i] == " " || line[i] == "\t")	//loop until not a space or tab
-		i++;
+			while(line[i] == ' ' || line[i] == '\t')	//loop until not a space or tab
+			i++;
 		}
-		if(line[i] == "#")
+		if(line[i] == '#')
 			break;
-		while(line[i] != " " || line[i] != "\t" || line[i] != "&&" || line[i] != ";" || line[i] != "||")
+		while(line[i] != ' ' || line[i] != '\t' || line[i] != '&' || line[i] != ';' || line[i] != '|')
 		{
 			cmd += line[i];
 			i++;
