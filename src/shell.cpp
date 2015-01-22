@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <array>
 
 using namespace std;
 
@@ -9,6 +10,7 @@ int main()
 	while(cmd != "exit")
 	{
 		string line;
+		int numParams;
 		cout << "$";	//print command prompt
 		getline(cin, line);	//puts the user text in line
 		int i = 0;	//index for line
