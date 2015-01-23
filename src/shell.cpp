@@ -127,7 +127,7 @@ int main()
 		if(i < line.size())
 			params = getParams(numParams, i, line);	//array to hold all the params
 		char *c = toChar(cmd);
-		//execute(c, params);
+		execute(c, params);
 		/*
 		if(i < line.size() && line[i] == '&')
 		{
