@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <array>
+#include <vector>
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
@@ -32,7 +32,7 @@ string toString(char *c)	//convert char* to string
 	return s;
 }
 */
-string getCmd(int i, string line)
+string getCmd(int i, string &line)
 {
 	string temp = "";
 	if(line[i] == ' ' || line[i] == '\t')   //line starts with space/tab
@@ -45,7 +45,55 @@ string getCmd(int i, string line)
 		temp += line[i];
 		i++;
 	}
+	line = line.substr(i, line.size());
 	return temp;
+}
+
+vector<int> connect(string line)
+{
+	vector<int> index;
+	std::string::size_type n;
+	bool b = true;
+	string tmp;
+	while(b)	//semi counter
+	{
+		n = line.find(';');
+		if(!(n == std::string::npos))
+			index.push_back(n);
+		else
+			b = false;
+	}
+	while(b)	//andd counter
+	{
+		n = line.find("&&");
+		if(!(n == std::string::npos))
+			index.push_back(n);
+		else
+			b = false;
+	}
+	while(b)	//orr counter
+	{
+		n = line.find("||");
+		if(!(n == std::string::npos))
+			index.push_back(n);
+		else
+			b = false;
+	}
+	int temp;
+	for(int i = 0; i < index.size(); i++)	//order the index values
+	{
+		temp = index[i];
+		for(int j = i+1; j < index.size(); i++)
+		{
+			if(index[j] < temp)
+			{
+				temp = index[j];
+				index[j] = index[i];
+				index[i] = temp;
+			}
+		}
+	}
+	return index;
 }
 
 int getNumParams(int t, string line)
@@ -62,9 +110,9 @@ int getNumParams(int t, string line)
 	return num;
 }   
 
-char** getParams(int num, int i, string line)
+vector<string> getParams(int num, int i, string line)
 {
-	char *p[num];
+	vector<string> p;
 	string temp = "";
 	for(int x = 0; x < num; x++)
 	{
@@ -73,8 +121,7 @@ char** getParams(int num, int i, string line)
 			temp += line[i];
 			i++; 
 		}
-		char *s = toChar(temp);
-		p[x] = s;   //store param in array
+		p.push_back(temp);   //store param in vector
 		temp = "";  //reset temp
 	}
 	return p;
@@ -106,27 +153,44 @@ void execute(char *cmd, char **params)
 
 int main()
 {
+	vector<string> cLines, cmds;
+	vector<vector<string>> params;
 	string cmd = "";
 	int i = 0;	//index for line
 	string line;
-	//do first prompt
-	cout << "$ ";	//print command prompt
-	getline(cin, line);	//puts the user text in line
-	std::string::size_type n = line.find('#');
-	if(!(n == std::string::npos))
-		line = line.substr(0, n);
-	if(i < line.size())
-		cmd = getCmd(i, line);
 	while(cmd != "exit")
-	{
-		int t = i;
-		int numParams;
-		if(t < line.size())
-			numParams = getNumParams(t, line);
-		char **params;
-		if(i < line.size())
-			params = getParams(numParams, i, line);	//array to hold all the params
-		char *c = toChar(cmd);
+	{	
+		//do prompt
+		cout << "$ ";	//print command prompt
+		getline(cin, line);	//puts the user text in line
+		std::string::size_type n = line.find('#');
+		if(!(n == std::string::npos))
+			line = line.substr(0, n);
+
+		//separate cmd lines
+		string tmp;
+		vector<int> connectors = connect(line);
+		int x = 0;
+		while(x < connectors[connectors.size() - 1])
+		{
+			tmp = line.substring(x, connectors[x]);
+			cLines.push_back(tmp);
+			x = connectors[x] + 1;
+		}
+		
+		x = 0;
+		while(x < cLines.size())	//loop to get each line cmd and params
+		{
+			tmp = cLine[x]
+			cmds[x] = getCmd(0, tmp);
+			if(tmp.size() > 0)
+				numParams = getNumParams(0, tmp);
+			if(numParams > 0)
+				params[x] = getParams(numParams, 0, tmp);
+			x++;
+		}
+
+		//char *c = toChar(cmd);
 		execute(c, params);
 		/*
 		if(i < line.size() && line[i] == '&')
