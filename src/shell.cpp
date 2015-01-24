@@ -129,7 +129,7 @@ char** getParams(int num, string line)
 {
 	cout << num;
 	int i = 0;
-	char *p[num];
+	char *p[num+1];
 	string temp = "";
 	for(int x = 0; x < num; x++)
 	{
@@ -144,7 +144,7 @@ char** getParams(int num, string line)
 		cout << ", " << temp;
 		temp = "";  //reset temp
 	}
-	p[num] = (char *)NULL;
+	//*p[num] = NULL;
 	return p;
 }
 
@@ -175,8 +175,8 @@ void execute(char *cmd, char **params)
 int main()
 {
 	vector<string> cLines, cmds;
-	char **params;
 	string cmd = "";
+	char **params;
 	int numParams = 0;
 	int i = 0;	//index for line
 	string line;
@@ -198,9 +198,14 @@ int main()
 			numParams = getNumParams(0, line);
 		cout << "params: ";
 		if(numParams > 0)
+		{
 			params = getParams(numParams, line);
+		}
 		else
+		{
+			params = NULL;
 			cout << "none";
+		}
 		cout << endl;
 		char *c = toChar(cmd);
 		execute(c, params);
