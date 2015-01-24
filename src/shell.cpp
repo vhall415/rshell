@@ -32,87 +32,104 @@ string toString(char *c)	//convert char* to string
 	return s;
 }
 */
-string getCmd(int i, string &line)
+string getCmd(string &line)
 {
+	int i = 0;
 	string temp = "";
-	if(line[i] == ' ' || line[i] == '\t')   //line starts with space/tab
-	{
-		while((line[i] == ' ' || line[i] == '\t') && i < line.size())   //loop until not a space or tab
-			i++;
-	}
+	while((line[i] == ' ' || line[i] == '\t') && i < line.size())   //loop until not a space or tab
+		i++;
 	while(i < line.size() && !(line[i] == ' ' || line[i] == '\t' || line[i] == '&' || line[i] == ';' || line[i] == '|'))    //determine the cmd
 	{
 		temp += line[i];
 		i++;
 	}
-	line = line.substr(i, line.size());
+	if(i < line.size())
+		line = line.substr(i+1, line.size());
+	else
+		line = "";
 	return temp;
 }
-
+/*
 vector<int> connect(string line)
 {
 	vector<int> index;
-	std::string::size_type n;
+	std::string::size_type n, m = 0;
 	bool b = true;
-	string tmp;
+	string temp = line;
 	while(b)	//semi counter
 	{
-		n = line.find(';');
+		n = temp.find(';');
 		if(!(n == std::string::npos))
-			index.push_back(n);
+		{	
+			m += n;
+			index.push_back(m);
+			temp = temp.substr(n+1);
+		}
 		else
 			b = false;
 	}
+	temp = line;
 	while(b)	//andd counter
 	{
-		n = line.find("&&");
+		n = temp.find("&&");
 		if(!(n == std::string::npos))
-			index.push_back(n);
+		{
+			m += n;
+			index.push_back(m);
+			temp = temp.substr(n+1);
+		}
 		else
 			b = false;
 	}
+	temp = line;
 	while(b)	//orr counter
 	{
-		n = line.find("||");
+		n = temp.find("||");
 		if(!(n == std::string::npos))
-			index.push_back(n);
+		{
+			m += n;
+			index.push_back(m);
+			temp = temp.substr(n+1);
+		}
 		else
 			b = false;
 	}
-	int temp;
+	int tmp;
 	for(int i = 0; i < index.size(); i++)	//order the index values
 	{
-		temp = index[i];
+		tmp = index[i];
 		for(int j = i+1; j < index.size(); i++)
 		{
-			if(index[j] < temp)
+			if(index[j] < tmp)
 			{
-				temp = index[j];
+				tmp = index[j];
 				index[j] = index[i];
-				index[i] = temp;
+				index[i] = tmp;
 			}
 		}
 	}
 	return index;
 }
-
+*/
 int getNumParams(int t, string line)
 {
 	int num = 0;
-	while(t < line.size() - 1)  //loop to find number of params
+	while(t < line.size())  //loop to find number of params
 	{
 		if(line[t] == '&' || line[t] == ';' || line[t] == '|')    //if char is a conjunction
 			break; 
-		if(line[t] == ' ' && !(line[t+1] == ' ' || line[t+1] == '\t' || line[t+1] == '&' || line[t+1] == ';' || line[t+1] == '|'))
+		if(!(line[t] == ' ' || line[t] == '\t' || line[t] == '&' || line[t] == ';' || line[t] == '|') && line[t+1] == ' ' || line[t+1] == '\0')
 			num++;    //increment if there is a space followed by a char 
 		t++;
 	}   
 	return num;
 }   
 
-vector<string> getParams(int num, int i, string line)
+char** getParams(int num, string line)
 {
-	vector<string> p;
+	cout << num;
+	int i = 0;
+	char *p[num];
 	string temp = "";
 	for(int x = 0; x < num; x++)
 	{
@@ -121,9 +138,13 @@ vector<string> getParams(int num, int i, string line)
 			temp += line[i];
 			i++; 
 		}
-		p.push_back(temp);   //store param in vector
+		i++;
+		char *c = toChar(temp);
+		p[x] = c;   //store param in vector
+		cout << ", " << temp;
 		temp = "";  //reset temp
 	}
+	p[num] = (char *)NULL;
 	return p;
 }
 
@@ -154,7 +175,7 @@ void execute(char *cmd, char **params)
 int main()
 {
 	vector<string> cLines, cmds;
-	vector<vector<string>> params;
+	char **params;
 	string cmd = "";
 	int numParams = 0;
 	int i = 0;	//index for line
@@ -167,9 +188,22 @@ int main()
 		std::string::size_type n = line.find('#');
 		if(!(n == std::string::npos))
 			line = line.substr(0, n);
-
+		cmd = getCmd(line);
+		cout << "cmd: " << cmd << endl;
+		if(line == "")
+			numParams == 0;
+		else
+			numParams = getNumParams(0, line);
+		cout << "params: ";
+		if(numParams > 0)
+			params = getParams(numParams, line);
+		else
+			cout << "none";
+		cout << endl;
+		char *c = toChar(cmd);
+		execute(c, params);
 		//separate cmd lines
-		string tmp;
+/*		string tmp;
 		vector<int> connectors = connect(line);
 		int x = 0;
 		while(x < connectors[connectors.size() - 1])
@@ -179,6 +213,7 @@ int main()
 			x = connectors[x] + 1;
 		}
 		x = 0;
+
 		while(x < cLines.size())	//loop to get each line cmd and params
 		{
 			tmp = cLines[x];
@@ -189,28 +224,7 @@ int main()
 				params[x] = getParams(numParams, 0, tmp);
 			x++;
 		}
-		
-		//char *c = toChar(cmd);
-		//execute(c, params);
-		/*
-		if(i < line.size() && line[i] == '&')
-		{
-			if(!(line[i+1] == '&'))
-				break;
-		}
-		if(i < line.size() && line[i] == '|')
-		{
-			if(!(line[i+1] == '|'))
-				break;
-		}
-		if(i < line.size() && line[i] == ';')
-		{
-			
-		}
 		*/
-		//cout << line << endl;
-		//cout << "cmd: " << b << endl;; // << "params: " << params << endl;
-		//cmd = toChar("exit");
 	}
 	return 0;
 }
