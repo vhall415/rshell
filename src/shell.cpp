@@ -189,6 +189,8 @@ int main()
 		if(!(n == std::string::npos))
 			line = line.substr(0, n);
 		cmd = getCmd(line);
+		if(cmd == "exit")
+			break;
 		cout << "cmd: " << cmd << endl;
 		if(line == "")
 			numParams == 0;
