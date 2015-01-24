@@ -156,6 +156,7 @@ int main()
 	vector<string> cLines, cmds;
 	vector<vector<string>> params;
 	string cmd = "";
+	int numParams = 0;
 	int i = 0;	//index for line
 	string line;
 	while(cmd != "exit")
@@ -173,15 +174,14 @@ int main()
 		int x = 0;
 		while(x < connectors[connectors.size() - 1])
 		{
-			tmp = line.substring(x, connectors[x]);
+			tmp = line.substr(x, connectors[x]);
 			cLines.push_back(tmp);
 			x = connectors[x] + 1;
 		}
-		
 		x = 0;
 		while(x < cLines.size())	//loop to get each line cmd and params
 		{
-			tmp = cLine[x]
+			tmp = cLines[x];
 			cmds[x] = getCmd(0, tmp);
 			if(tmp.size() > 0)
 				numParams = getNumParams(0, tmp);
@@ -189,9 +189,9 @@ int main()
 				params[x] = getParams(numParams, 0, tmp);
 			x++;
 		}
-
+		
 		//char *c = toChar(cmd);
-		execute(c, params);
+		//execute(c, params);
 		/*
 		if(i < line.size() && line[i] == '&')
 		{
@@ -211,13 +211,6 @@ int main()
 		//cout << line << endl;
 		//cout << "cmd: " << b << endl;; // << "params: " << params << endl;
 		//cmd = toChar("exit");
-		cout << "$ ";	//print command prompt
-		getline(cin, line);	//puts the user text in line
-		std::string::size_type n = line.find('#');
-		if(!(n == std::string::npos))
-			line = line.substr(0, n);
-		if(i < line.size())
-			cmd = getCmd(i, line);
 	}
 	return 0;
 }
