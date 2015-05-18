@@ -21,10 +21,7 @@ void removeDir(const char *curr) {
 		exit(1);
 	}
 	while(NULL != (filespecs = readdir(dirp))) {
-		if(filespecs == -1) {
-			perror("readdir failed");
-			exit(1);
-		}
+		
 		if(strcmp(filespecs->d_name, ".") == 0 || strcmp(filespecs->d_name, "..") == 0)
 		continue;
 		strcpy(temp, curr);
@@ -41,6 +38,10 @@ void removeDir(const char *curr) {
 		}
 		else if(S_ISDIR(buf.st_mode))
 			removeDir(temp);
+	}
+	if(filespecs == NULL) {
+		perror("readdir failed");
+		exit(1);
 	}
 	rmdir(curr);
 	return;

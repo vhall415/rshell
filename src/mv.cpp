@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 	}
 	i = stat(argv[2], &buf);
 	if(i == -1) {
-		perror();
+		perror("file two doesn't exist");
 		link(argv[1], argv[2]);
 		unlink(argv[1]);
 	}
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 		strcat(temp, argv[1]);
 		i = stat(temp, &buf);
 		if(i == -1) {
-			perror();
+			perror("file two doesn't exist");
 			link(argv[1], temp);
 			unlink(argv[1]);
 		}
