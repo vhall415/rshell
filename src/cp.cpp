@@ -11,6 +11,7 @@
 using namespace std;
 
 void one(char *in, char *out) {
+	int i;
 	std::ifstream is;     // open file
 	is.open(in, ifstream::in);
 	std::ofstream outfile;
