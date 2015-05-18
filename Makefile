@@ -1,7 +1,7 @@
 CFLAGS = -g -Wall -Werror -ansi -pedantic
 
 all:
-	if [ ! -d bin ]; then mkdir; fi
+	if [ ! -d bin ]; then mkdir bin; fi
 	g++ $(CFLAGS) src/shell.cpp -o bin/rshell
 	g++ $(CFLAGS) src/ls.cpp -o bin/ls
 	g++ $(CFLAGS) src/cp.cpp -o bin/cp
