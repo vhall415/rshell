@@ -21,12 +21,20 @@ void removeDir(const char *curr) {
 		exit(1);
 	}
 	while(NULL != (filespecs = readdir(dirp))) {
+		if(filespecs == -1) {
+			perror("readdir failed");
+			exit(1);
+		}
 		if(strcmp(filespecs->d_name, ".") == 0 || strcmp(filespecs->d_name, "..") == 0)
 		continue;
 		strcpy(temp, curr);
 		strcat(temp, "/");
 		strcat(temp, filespecs->d_name);
-		stat(temp, &buf);
+		int s = stat(temp, &buf);
+		if(s == -1) {
+			perror("stat failed");
+			exit(1);
+		}
 		if(S_ISREG(buf.st_mode))
 		{
 			unlink(temp);
@@ -53,7 +61,11 @@ int main(int argc, char *argv[]) {
 			param_r = true;
 		}
 		else{
-			stat(argv[i], &buf);
+			int s = stat(argv[i], &buf);
+			if(s == -1) {
+				perror("Stat failed");
+				exit(1);
+			}
 			if(S_ISREG(buf.st_mode))
 			{
 				unlink(argv[i]);

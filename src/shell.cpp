@@ -26,9 +26,12 @@ using namespace std;
 
 char* getUserInfo(string &currHost) {
 	struct passwd *pass = getpwuid(getuid());
+	if(pass == NULL)
+		perror("getpwuid failed");
 	char *user = pass->pw_name;
 	char host[100];
-	gethostname(host, sizeof(host));
+	if(-1 == gethostname(host, sizeof(host)))
+		perror("gethostname failed");
 	currHost = host;
 	if(currHost.find('.') != std::string::npos)
 		currHost.resize(currHost.find('.'));

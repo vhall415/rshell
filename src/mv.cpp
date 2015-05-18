@@ -16,11 +16,12 @@ int main(int argc, char *argv[]) {
 	char temp[100];
 	int i = stat(argv[1], &buf);
 	if(i == -1) {
-		cerr << "file does not exist" << endl;
+		perror("File does not exist");
 		exit(1);
 	}
 	i = stat(argv[2], &buf);
 	if(i == -1) {
+		perror();
 		link(argv[1], argv[2]);
 		unlink(argv[1]);
 	}
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]) {
 		strcat(temp, argv[1]);
 		i = stat(temp, &buf);
 		if(i == -1) {
+			perror();
 			link(argv[1], temp);
 			unlink(argv[1]);
 		}
