@@ -8,5 +8,8 @@ The connector will be either || or && or ;
 Anything typed after # will be considered a comment
 The shell can be exited with the command `exit`
 
-#Bugs
-No known bugs
+The redirection operations (<, >, >>, <<<) can be used to redirect inputs and output.
+
+#Bugs to fix
+
+Doesn't support piping
