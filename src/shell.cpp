@@ -24,9 +24,9 @@
 
 using namespace std;
 
-char* getUserInfo(char* user, string &currHost) {
+char* getUserInfo(string &currHost) {
 	struct passwd *pass = getpwuid(getuid());
-	user = pass->pw_name;
+	char *user = pass->pw_name;
 	char host[100];
 	gethostname(host, sizeof(host));
 	currHost = host;
@@ -611,13 +611,12 @@ int execRedirection(vector<string> cmds){
 	return rval;
 }
 
-
 int main() {
 	vector<string> cmdline;
 	//get user info
 	char *user;
 	string host;
-	user = getUserInfo(user, host);
+	user = getUserInfo(host);
 	
 	while(1) {
 		//output prompt

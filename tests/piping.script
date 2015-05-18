@@ -1,0 +1,273 @@
+Script started on Sun 17 May 2015 10:52:13 PM PDT
+~
+vhall001@hammer $ cd rshell
+~/rshell
+vhall001@hammer $ make
+if [ ! -d bin ]; then mkdir bin; fi
+g++ -Wall -Werror -ansi -pedantic src/shell.cpp -o bin/rshell
+g++ -Wall -Werror -ansi -pedantic src/mv.cpp -o bin/mv
+g++ -Wall -Werror -ansi -pedantic src/rm.cpp -o bin/rm
+~/rshell
+vhall001@hammer $ #output and input redirection
+~/rshell
+vhall001@hammer $ echo this is a test > test
+~/rshell
+vhall001@hammer $ cast [K[K[Kt < test
+this is a test
+~/rshell
+vhall001@hammer $ cat       <       te[K[K[K            test # input with a[Kspaces
+this is a test
+~/rshell
+vhall001@hammer $ 
+Display all 2881 possibilities? (y or n)
+~/rshell
+vhall001@hammer $       cat   <   [K[K[K[K                               <   test[Kt
+this is a test
+~/rshell
+vhall001@hammer $                   cat<test #no spaces inbetween re[K[Kredirection
+this is a test
+~/rshell
+vhall001@hammer $ cat
+cat        catchsegv  
+~/rshell
+vhall001@hammer $ cat<tes[K[K[K[K[K[K[Kpwd        >   test #tap[Kbs and spaces[K[K[K[K[K[K[K[K[K[K[K/spaces
+~/rshell
+vhall001@hammer $ cast tes[K[K[K[K[K[Kt test
+/home/csmajs/vhall001/rshell
+~/rshell
+vhall001@hammer $ cat string[K[K[K[K[K[Ktest one > test
+cat: test: input file is output file
+cat: one: No such file or directory
+~/rshell
+vhall001@hammer $ ex[Kcho test one .[K> test
+~/rshell
+vhall001@hammer $ cat < test
+test one
+~/rshell
+vhall001@hammer $ echo test two >> test
+~/rshell
+vhall001@hammer $ cat <test
+test one
+test two
+~/rshell
+vhall001@hammer $ cat append >> test
+cat: append: No such file or directory
+~/rshell
+vhall001@hammer $ cat PP[K[Kappend two >> test
+cat: append: No such file or directory
+cat: two: No such file or directory
+~/rshell
+vhall001@hammer $ cat[K[K[Kecho append >> test
+~/rshell
+vhall001@hammer $ echo append >[Ktwo >> test
+~/rshell
+vhall001@hammer $ cat >[K< test
+test one
+test two
+append
+append two
+~/rshell
+vhall001@hammer $ #multiple redir
+~/rshell
+vhall001@hammer $ le[Ks[K[Kw[Kpwd > test && cat < test && echo current [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kecho current directory >> a[K[K[K test && cat < test && pwd >> test &&  cat < test
+current directory
+current directory
+/home/csmajs/vhall001/rshell
+~/rshell
+vhall001@hammer $ echo test > test && chat[K[K[Kat < test || echo did it work
+test
+~/rshell
+vhall001@hammer $ echo append > t[K[K> test; cat < test; echo append two >> test; cat  < test
+test
+append
+test
+append
+append two
+~/rshell
+vhall001@hammer $ ls < test
+[0m[38;5;27mbin[0m/  LICENSE  Makefile  README.md  [38;5;27msrc[0m/  test  [38;5;27mtests[0m/
+[m~/rshell
+vhall001@hammer $ #ls isn't av[Kffected with rediir[K[Krection
+~/rshell
+vhall001@hammer $ ls >test[K[K[K[K test
+~/rshell
+vhall001@hammer $ cat <test
+bin/
+LICENSE
+Makefile
+README.md
+src/
+test
+tests/
+~/rshell
+vhall001@hammer $ ls[K[K#ls will output to files
+~/rshell
+vhall001@hammer $ echo is this r[Kes[Krased > test
+~/rshell
+vhall001@hammer $ cat test[K[K[K[K< test
+is this erased
+~/rshell
+vhall001@hammer $ echo this will [K[K[K[K[Khas r[Kerased the r[Kprevious file > test
+~/rshell
+vhall001@hammer $ cast < test
+bash: cast: command not found
+~/rshell
+vhall001@hammer $ cast[K[Kt < test
+this has erased the previous file
+~/rshell
+vhall001@hammer $ # [Kappend
+~/rshell
+vhall001@hammer $ cat < [K[K[K[K[K[Kecho line one > test
+~/rshell
+vhall001@hammer $ eh[Kcho append line tow[K[Kwo >> test
+~/rshell
+vhall001@hammer $ echo append line three >> test
+~/rshell
+vhall001@hammer $ cat < test
+line one
+append line two
+append line three
+~/rshell
+vhall001@hammer $ #[K# test bot [Kh < and >
+~/rshell
+vhall001@hammer $ cat <test >t[K test [K2 && cat test
+line one
+append line two
+append line three
+~/rshell
+vhall001@hammer $ cat test[K[K[K[K<t[K test2
+line one
+append line two
+append line three
+~/rshell
+vhall001@hammer $ eh[Kcho new test > test [K2 < test
+~/rshell
+vhall001@hammer $ cat test[K[K[K[K<test
+line one
+append line two
+append line three
+~/rshell
+vhall001@hammer $ cat < test2
+new test
+~/rshell
+vhall001@hammer $ cat < >
+bash: syntax error near unexpected token `>'
+~/rshell
+vhall001@hammer $ pwd <[K> < test > test2
+bash: syntax error near unexpected token `<'
+~/rshell
+vhall001@hammer $ pwe[Kd > test > [K[K< test2
+~/rshell
+vhall001@hammer $ cat test
+/home/csmajs/vhall001/rshell
+~/rshell
+vhall001@hammer $ cat test2
+new test
+~/rshell
+vhall001@hammer $ #multi inputs/outpust[K[Kst[K[Kts fails
+~/rshell
+vhall001@hammer $ echo out > test > test2
+~/rshell
+vhall001@hammer $ #nothing happs[Kens[Ked[K[K[K[K[K[K[K[Kwill happen
+~/rshell
+vhall001@hammer $ cas[Kt test[K[K[K[K< test
+~/rshell
+vhall001@hammer $ cat <[K[K[K[K[Kecho test1 > test
+~/rshell
+vhall001@hammer $ c[Kc[Kechot [K[K test2 > test2
+~/rshell
+vhall001@hammer $ cat test1 < test2
+cat: test1: No such file or directory
+~/rshell
+vhall001@hammer $ cat test <[K[K[K[K[K[K< test < test2
+test2
+~/rshell
+vhall001@hammer $ #pr[K[K[K#does [K[K[K[K[Kdid [K[K[K[Kfarthest op[K[Kfile used
+~/rshell
+vhall001@hammer $ #no piping af[Kvailable
+~/rshell
+vhall001@hammer $ ls | grep
+Usage: grep [OPTION]... PATTERN [FILE]...
+Try `grep --help' for more information.
+~/rshell
+vhall001@hammer $ ls [K[K[Kls | sed 's/rw//'
+bin/
+LICENSE
+Makefile
+README.md
+src/
+test
+test2
+tests/
+~/rshell
+vhall001@hammer $ #pipe doesn't work; id[Kgnored the rest of ht e[K[K[K[Kthe line
+~/rshell
+vhall001@hammer $ #psoo[K[K[Kossible extra credit
+~/rshell
+vhall001@hammer $ cat <<< "test with [K[K[K[K[K[K wito[Kh quotes"
+test with quotes
+~/rshell
+vhall001@hammer $ cat      <<<<<[K[K    "que[Kotes and spaces/tabs"
+quotes and spaces/tabs
+~/rshell
+vhall001@hammer $ cat << no quotes
+loop $ cat ,,,[K[K[K<<< no quotes
+loop $ ^C
+~/rshell
+vhall001@hammer $ cat <<< no quotes
+cat: quotes: No such file or directory
+~/rshell
+vhall001@hammer $ cat <<< " quo[Kotes again" [K
+ quotes again
+~/rshell
+vhall001@hammer $ cat <<< no[K[Ktest
+test
+~/rshell
+vhall001@hammer $ cat <<< it workded[K[K[Ked!
+cat: worked!: No such file or directory
+~/rshell
+vhall001@hammer $ cat[K[K[Kcat << [K< sign[K[Kg[KngleWords [K
+singleWords
+~/rshell
+vhall001@hammer $ cat <<< test > testfile
+~/rshell
+vhall001@hammer $ cat < testfile
+test
+~/rshell
+vhall001@hammer $ cat [K[K[K[K# test multi >
+~/rshell
+vhall001@hammer $ ls 0> new
+[0m[38;5;27mbin[0m/  LICENSE  Makefile  new  README.md  [38;5;27msrc[0m/  test  test2  testfile  [38;5;27mtests[0m/
+[m~/rshell
+vhall001@hammer $ cat new[K[K[K< new
+~/rshell
+vhall001@hammer $ ls 1> new
+~/rshell
+vhall001@hammer $ cat < new
+bin/
+LICENSE
+Makefile
+new
+README.md
+src/
+test
+test2
+testfile
+tests/
+~/rshell
+vhall001@hammer $ pwd >>[K[K2> new
+/home/csmajs/vhall001/rshell
+~/rshell
+vhall001@hammer $ cat ne[K[K< new
+~/rshell
+vhall001@hammer $ echo add l[Ktes[Kxt 1>> new
+~/rshell
+vhall001@hammer $ cat < new
+add text
+~/rshell
+vhall001@hammer $ # end of testing
+~/rshell
+vhall001@hammer $ exit
+exit
+
+Script done on Sun 17 May 2015 11:18:16 PM PDT
