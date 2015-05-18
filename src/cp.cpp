@@ -11,7 +11,6 @@
 using namespace std;
 
 void one(char *in, char *out) {
-	int i;
 	std::ifstream is;     // open file
 	is.open(in, ifstream::in);
 	std::ofstream outfile;
@@ -65,7 +64,7 @@ void three(char *in, char *out) {
 				perror("Read failed");
 				exit(1);
 			}
-			if(-1 == write(fd2, &buff, n)
+			if(-1 == write(fd2, &buff, n))
 				perror("Write failed");
 		
 		if(close(fd1) < 0)
