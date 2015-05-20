@@ -12,4 +12,4 @@ The redirection operations (<, >, >>, <<<) can be used to redirect inputs and ou
 
 #Bugs to fix
 
-Doesn't support piping
+Errors with piping
