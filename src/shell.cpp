@@ -614,7 +614,59 @@ int execRedirection(vector<string> cmds){
 	return rval;
 }
 
+void handler(int i){
+	if(i == SIGINT){
+		int temp = getpid();
+		if(-1 == temp){
+			perror("getpid");
+			exit(1);
+		}
+		if(temp == 0)
+			exit(0);
+		return;
+	}
+	
+	if(i == SIGTSTP){
+		raise(SIGSTOP);
+		cout << "  Process Stopped" << endl;
+	}
+}
+
+int foreground(){
+	int status = 0;
+	int succ = kill(0,SIGCONT);
+	if(succ == -1){
+		perror("kill");
+	}
+	else {
+		while(errno != ECHILD && errno != EINTR){
+			waitpid(0,&status,WCONTINUED);
+			if(status != 0){
+				perror("execv");
+				succ = status;
+			}
+		}
+	}
+	return (succ == 0);
+}
+
+void background(){
+	int succ = kill(0,SIGCONT);
+	if(succ == -1){
+		perror("kill");
+	}
+}
+
 int main() {
+	if(SIG_ERR == signal(SIGINT, handler)){
+		perror("Signal Error");
+		exit(1);
+	}
+	if(SIG_ERR == signal(SIGTSTP, handler)){
+		perror("Signal Error");
+		exit(1);
+	}
+	
 	vector<string> cmdline;
 	//get user info
 	char *user;
