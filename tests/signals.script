@@ -1,0 +1,127 @@
+Script started on Fri 29 May 2015 07:29:41 PM PDT
+~
+vhall001@hammer $ cd rshell
+~/rshell
+vhall001@hammer $ make
+if [ ! -d bin ]; then mkdir bin; fi
+g++ -Wall -Werror -ansi -pedantic src/shell.cpp -o bin/rshell
+g++ -Wall -Werror -ansi -pedantic src/ls.cpp -o bin/ls
+g++ -Wall -Werror -ansi -pedantic src/cp.cpp -o bin/cp
+g++ -Wall -Werror -ansi -pedantic src/mv.cpp -o bin/mv
+g++ -Wall -Werror -ansi -pedantic src/rm.cpp -o bin/rm
+~/rshell
+vhall001@hammer $ bin/rshell
+vhall001@hammer:~/rshell $ pwd
+/home/csmajs/vhall001/rshell
+vhall001@hammer:~/rshell $ ls
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer:~/rshell $ c cd src     sr     #cd <PATH>
+vhall001@hammer:~/rshell $ cd src
+vhall001@hammer:~/rshell/src $ pwd
+/home/csmajs/vhall001/rshell/src
+vhall001@hammer:~/rshell/src $ cd ..
+vhall001@hammer:~/rshell $ pwd
+/home/csmajs/vhall001/rshell
+vhall001@hammer:~/rshell $ cd ./src    ./rshell/src
+vhall001@hammer:~/rshell/src $ pwd
+/home/csmajs/vhall001/rshell/src
+vhall001@hammer:~/rshell/src $ #cs d to p home directory
+vhall001@hammer:~/rshell/src $ cd
+vhall001@hammer:~ $ ls
+a.out  checksyscalls.sh  cs100	cs111  rshell  temp  ucr-cs100
+vhall001@hammer:~ $ cd cs100/labs
+vhall001@hammer:~/cs100/labs $ cd
+vhall001@hammer:~ $ #cd -
+vhall001@hammer:~ $ cd -
+vhall001@hammer:~/cs100/labs $ cd -
+vhall001@hammer:~ $ cd -
+vhall001@hammer:~/cs100/labs $ cd ../../rshell
+vhall001@hammer:~/rshell $ cd -
+vhall001@hammer:~/cs100/labs $  c  cd -
+vhall001@hammer:~/rshell $       cd        -
+vhall001@hammer:~/cs100/labs $ #spacing doe   still doesn't matter for commands
+vhall001@hammer:~/cs100/labs $                          cd                  
+vhall001@hammer:~ $               cd                   rshell            
+vhall001@hammer:~/rshell $ #prompt shows current directory
+vhall001@hammer:~/rshell $ #EC prompty  directory displayed with home fold         ~ inp  place of home folder
+vhall001@hammer:~/rshell $ cd ..
+vhall001@hammer:~ $ cd ..
+vhall001@hammer:/home/csmajs $ #not in home forldwe   d   lder do  so regu    goes to regular prompty  dip splay
+vhall001@hammer:/home/csmajs $ cd
+vhall001@hammer:~ $ #^C stops current foreground job bo ut doesn't leave shell
+vhall001@hammer:~ $ cat
+kjdf
+kjdf
+^Cvhall001@hammer:~ $ #e EC ^A Z with fg and bg
+vhall001@hammer:~ $ cat
+lkdjfk
+lkdjfk
+lksjdflks
+lksjdflks
+^Z
+[1]+  Stopped                 bin/rshell
+~/rshell
+vhall001@hammer $ fg
+bin/rshell
+  Process Stopped
+lksdjf
+lksdjf
+lksdjf
+lksdjf
+^Cvhall001@hammer:~ $ #cat cong tinued when fg called             ith fg cmd
+vhall001@hammer:~ $ c bin/rshell
+Error with execvp: No such file or directory
+vhall001@hammer:~ $ ls
+a.out  checksyscalls.sh  cs100	cs111  rshell  temp  ucr-cs100
+vhall001@hammer:~ $ cat
+lkad
+lkad
+^Z
+[1]+  Stopped                 bin/rshell
+~/rshell
+vhall001@hammer $ ls
+[0m[38;5;27mbin[0m/  LICENSE  Makefile  README.md  [38;5;27msrc[0m/  [38;5;27mtests[0m/
+[m~/rshell
+vhall001@hammer $ pwd
+/home/csmajs/vhall001/rshell
+~/rshell
+vhall001@hammer $ fg
+bin/rshell
+  Process Stopped
+lksdjf
+lksdjf
+lksjdfg
+lksjdfg
+^Cvhall001@hammer:~ $ #cat  f  fg works after other cmds called inbetween                    s used between ^Z and fg
+vhall001@hammer:~ $ cag t
+lksdjf
+lksdjf
+lkgske
+lkgske
+^Z
+[1]+  Stopped                 bin/rshell
+~/rshell
+vhall001@hammer $ bg
+[1]+ bin/rshell &
+
+[1]+  Stopped                 bin/rshell
+~/rshell
+vhall001@hammer $ #cat is in the bag[Kckt[Kground
+~/rshell
+vhall001@hammer $ ls
+[0m[38;5;27mbin[0m/  LICENSE  Makefile  README.md  [38;5;27msrc[0m/  [38;5;27mtests[0m/
+[m~/rshell
+vhall001@hammer $ fg
+bin/rshell
+  Process Stopped
+lkdsjg
+lkdsjg
+lksdjglk;a
+lksdjglk;a
+^Cvhall001@hammer:~ $ c % #cat pulled to forg eground still works after being in bj g ackground
+vhall001@hammer:~ $ e exit
+~/rshell
+vhall001@hammer $ exit
+exit
+
+Script done on Fri 29 May 2015 07:40:25 PM PDT

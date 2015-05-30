@@ -24,22 +24,43 @@
 
 using namespace std;
 
-char* getUserInfo(string &currHost) {
+int mainpid;
+int currpid = 0;
+const char *homedir;
+const char *user;
+char *currpwd;
+char *oldpwd;
+char *cwd = NULL;
+
+void getUserInfo(string &currHost) {
 	struct passwd *pass = getpwuid(getuid());
 	if(pass == NULL)
 		perror("getpwuid failed");
-	char *user = pass->pw_name;
+	user = pass->pw_name;
+	if((homedir = getenv("HOME")) == NULL)
+		homedir = pass->pw_dir;	//home directory of user
 	char host[100];
 	if(-1 == gethostname(host, sizeof(host)))
 		perror("gethostname failed");
 	currHost = host;
 	if(currHost.find('.') != std::string::npos)
 		currHost.resize(currHost.find('.'));
-	return user;
 }
 
 void prompt(const char *user, const string host) {
-	cout << user << '@' << host << ' ';
+	if((cwd = getcwd(cwd, PATH_MAX)) == NULL) {
+		perror("getcwd failed");
+		exit(1);
+	}
+	cout << user << '@' << host << ':';
+	if(0 == (strncmp(getenv("HOME"), cwd, strlen(getenv("HOME"))))) {
+		char temp[PATH_MAX];
+		strcpy(temp, "~");
+		strcat(temp, cwd + strlen(getenv("HOME")));
+		cwd = temp;
+	}
+
+	cout << cwd << ' ';
 	cout << '$' << ' ';
 }
 
@@ -177,6 +198,71 @@ int exec(string cmds) {
 		boost::split(vec, cmds, boost::is_any_of(" "), boost::token_compress_on);
 		if(vec.at(0) == "exit" || vec.at(0) == "EXIT")
 			exit(1);
+		else if(vec.at(0) == "cd"){
+			if(vec.size() < 2){
+				if(chdir(homedir) == -1) {
+					perror("Chdir failed");
+				}
+				if(setenv("OLDPWD", currpwd, 1) == -1)
+					perror("Setenv failed");
+				if(setenv("PWD", homedir, 1) == -1)
+					perror("Setenv failed");
+				oldpwd = getenv("OLDPWD");
+				currpwd = getenv("PWD");
+				return 0;
+			}
+			else if(vec.at(1) == "-") {
+				if(chdir(getenv("OLDPWD")) == -1) {
+					perror("Chdir failed");
+				}
+				if(setenv("OLDPWD", currpwd, 1) == -1)
+					perror("Setenv failed");
+				if(setenv("PWD", oldpwd, 1) == -1)
+					perror("Setenv failed");
+				oldpwd = getenv("OLDPWD");
+				currpwd = getenv("PWD");
+				return 0;
+			}
+			else {
+				if(chdir(vec.at(1).c_str()) == -1){
+					perror("Chdir Error");
+					return -1;	
+				}
+				if(setenv("OLDPWD", currpwd, 1) == -1)
+					perror("Setenv failed");
+				if(setenv("PWD", getcwd(cwd, PATH_MAX), 1) == -1)
+					perror("Setenv failed");
+				oldpwd = getenv("OLDPWD");
+				currpwd = getenv("PWD");
+				return 0;
+			}
+		}
+		else if(vec.at(0) == "fg"){
+			if(currpid != 0){
+				if(-1 == kill(mainpid, SIGCONT)){
+					perror("Kill Error");
+					return -1;
+				}
+				return 0;
+			}
+			else{
+				cout << "No fg process" << endl;
+				return -1;
+			}
+		}
+		else if(vec.at(0) == "bg"){
+			if(currpid != 0){
+				if(-1 == kill(mainpid, SIGCONT)){
+					perror("Kill Error");
+					return -1;
+				}
+				return 0;
+			}
+			else{
+				cout << "No bg process" << endl;
+				return -1;
+			}
+		}
 	}
 
 	vector<char*> c = vecStrToChar(vec);
@@ -632,30 +718,30 @@ void handler(int i){
 	}
 }
 
-int foreground(){
-	int status = 0;
-	int succ = kill(0,SIGCONT);
-	if(succ == -1){
-		perror("kill");
-	}
-	else {
-		while(errno != ECHILD && errno != EINTR){
-			waitpid(0,&status,WCONTINUED);
-			if(status != 0){
-				perror("execv");
-				succ = status;
-			}
-		}
-	}
-	return (succ == 0);
-}
+//int foreground(){
+//	int status = 0;
+//	int succ = kill(0,SIGCONT);
+//	if(succ == -1){
+//		perror("kill");
+//	}
+//	else {
+//		while(errno != ECHILD && errno != EINTR){
+//			waitpid(0,&status,WCONTINUED);
+//			if(status != 0){
+//				perror("execv");
+//				succ = status;
+//			}
+//		}
+//	}
+//	return (succ == 0);
+//}
 
-void background(){
-	int succ = kill(0,SIGCONT);
-	if(succ == -1){
-		perror("kill");
-	}
-}
+//void background(){
+//	int succ = kill(0,SIGCONT);
+//	if(succ == -1){
+//		perror("kill");
+//	}
+//}
 
 int main() {
 	if(SIG_ERR == signal(SIGINT, handler)){
@@ -669,10 +755,10 @@ int main() {
 	
 	vector<string> cmdline;
 	//get user info
-	char *user;
 	string host;
-	user = getUserInfo(host);
-	
+	getUserInfo(host);
+	currpwd = getenv("PWD");
+
 	while(1) {
 		//output prompt
 		prompt(user, host);
