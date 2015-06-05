@@ -12,17 +12,19 @@
 
 using namespace std;
 
+const char *user;
 
-
-char* getUserInfo(char* user, string &currHost) {
+void getUserInfo(string &currHost) {
 	struct passwd *pass = getpwuid(getuid());
+	if(pass == NULL)
+		perror("getpwuid failed");
 	user = pass->pw_name;
 	char host[100];
-	gethostname(host, sizeof(host));
+	if(-1 == gethostname(host, sizeof(host)))
+		perror("gethostname failed");
 	currHost = host;
 	if(currHost.find('.') != std::string::npos)
 		currHost.resize(currHost.find('.'));
-	return user;
 }
 
 void prompt(const char *user, const string host) {
@@ -128,9 +130,8 @@ int exec(string cmds) {
 int main() {
 	vector<string> cmdline;
 	//get user info
-	char *user;
 	string host;
-	user = getUserInfo(user, host);
+	getUserInfo(host);
 	
 	while(1) {
 		//output prompt
