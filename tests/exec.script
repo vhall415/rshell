@@ -1,0 +1,124 @@
+Script started on Mon 08 Jun 2015 10:27:14 PM PDT
+~
+vhall001@hammer $ cd rshell
+~/rshell
+vhall001@hammer $ make
+if [ ! -d bin ]; then mkdir bin; fi
+g++ -Wall -Werror -ansi -pedantic src/shell.cpp -o bin/rshell
+~/rshell
+vhall001@hammer $ binrshell[K[K[K[K[K[K/rshell
+vhall001@hammer $ #executes commands
+vhall001@hammer $ ls
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $ pwd
+/home/csmajs/vhall001/rshell
+vhall001@hammer $ #m  #f commands with flags
+vhall001@hammer $ ls -a
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+vhall001@hammer $ ls -al
+total 52
+drwx------  6 vhall001 csmajs  4096 Jun  8 22:12 .
+drwx------ 13 vhall001 csmajs  4096 Jun  7 01:10 ..
+drwx------  2 vhall001 csmajs  4096 Jun  8 22:20 bin
+drwx------  8 vhall001 csmajs  4096 Jun  8 22:09 .git
+-rw-------  1 vhall001 csmajs 18027 May 17 21:59 LICENSE
+-rw-------  1 vhall001 csmajs   214 Jun  8 22:09 Makefile
+-rw-------  1 vhall001 csmajs   457 Jun  5 11:04 README.md
+drwx------  2 vhall001 csmajs  4096 Jun  8 22:09 src
+drwx------  2 vhall001 csmajs  4096 Jun  5 11:27 tests
+vhall001@hammer $ ls -a -a-  -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -a -l -a -  a -  a -a   a -a a -a
+total 52
+drwx------  6 vhall001 csmajs  4096 Jun  8 22:12 .
+drwx------ 13 vhall001 csmajs  4096 Jun  7 01:10 ..
+drwx------  2 vhall001 csmajs  4096 Jun  8 22:20 bin
+drwx------  8 vhall001 csmajs  4096 Jun  8 22:09 .git
+-rw-------  1 vhall001 csmajs 18027 May 17 21:59 LICENSE
+-rw-------  1 vhall001 csmajs   214 Jun  8 22:09 Makefile
+-rw-------  1 vhall001 csmajs   457 Jun  5 11:04 README.md
+drwx------  2 vhall001 csmajs  4096 Jun  8 22:09 src
+drwx------  2 vhall001 csmajs  4096 Jun  5 11:27 tests
+vhall001@hammer $ #multiple flags       sm ame flags tra eate  d ase    one flag
+vhall001@hammer $ \ #testing comments
+vhall001@hammer $ #ls
+vhall001@hammer $ ls#
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $ ls#comments 
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $ ls#pwd
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $ ls                   #multi     many spaces
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $               #many     ls          #p spaces before command
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $     ls       -a       -l            -al      $ #spaces with flags
+total 52
+drwx------  6 vhall001 csmajs  4096 Jun  8 22:12 .
+drwx------ 13 vhall001 csmajs  4096 Jun  7 01:10 ..
+drwx------  2 vhall001 csmajs  4096 Jun  8 22:20 bin
+drwx------  8 vhall001 csmajs  4096 Jun  8 22:09 .git
+-rw-------  1 vhall001 csmajs 18027 May 17 21:59 LICENSE
+-rw-------  1 vhall001 csmajs   214 Jun  8 22:09 Makefile
+-rw-------  1 vhall001 csmajs   457 Jun  5 11:04 README.md
+drwx------  2 vhall001 csmajs  4096 Jun  8 22:09 src
+drwx------  2 vhall001 csmajs  4096 Jun  5 11:27 tests
+vhall001@hammer $ J#  #conenc   ncego  tors
+vhall001@hammer $ ls ; pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/vhall001/rshell
+vhall001@hammer $ ls;pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/vhall001/rshell
+vhall001@hammer $ ls             ;             pwd       
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/vhall001/rshell
+vhall001@hammer $ ls || pwd
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $ pwd && ls
+/home/csmajs/vhall001/rshell
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $ pwd                     ||            ls
+/home/csmajs/vhall001/rshell
+vhall001@hammer $ pwd||ls
+Error with execvp: No such file or directory
+vhall001@hammer $ pwd ||  &&        ls
+/home/csmajs/vhall001/rshell
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $ #multiple connectors
+vhall001@hammer $ ls; fla  alse && pwe d || ls
+bin  LICENSE  Makefile	README.md  src	tests
+bin  LICENSE  Makefile	README.md  src	tests
+vhall001@hammer $ ls -a; echo hello && mkdir test || echo world; git         ld;
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+hello
+vhall001@hammer $ ls
+bin  LICENSE  Makefile	README.md  src	test  tests
+vhall001@hammer $ ls -a  ; echo hello   llo || ma kdir test2 && echo world;
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  test  tests
+hello
+world
+vhall001@hammer $ ls
+bin  LICENSE  Makefile	README.md  src	test  tests
+vhall001@hammer $ #connectors executed from left to right
+vhall001@hammer $ #testing exit
+vhall001@hammer $ exit #  no other cm=  ommands
+~/rshell
+vhall001@hammer $ bin/rshell
+vhall001@hammer $ ls esi  xit #exit as a param
+ls: cannot access exit: No such file or directory
+vhall001@hammer $ ls; pwd || exit #esit     xit with connectors
+bin  LICENSE  Makefile	README.md  src	test  tests
+/home/csmajs/vhall001/rshell
+vhall001@hammer $ ls && exit #will display ls then exit the shell
+bin  LICENSE  Makefile	README.md  src	test  tests
+~/rshell
+vhall001@hammer $ bin/rshell
+vhall001@hammer $                   exit             #with spaces      a many spaces
+~/rshell
+vhall001@hammer $ bin/rshell
+vhall001@hammer $ #extra credit promptw  with username and hostname
+vhall001@hammer $ exit
+~/rshell
+vhall001@hammer $ exit
+exit
+
+Script done on Mon 08 Jun 2015 10:37:47 PM PDT
